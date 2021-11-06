@@ -12,7 +12,7 @@ import subprocess
 import tqdm
 
 CUTOFF_SIZE = 2 * 2**10
-SHELVE = '/tmp/progressbar-it-all.db'
+SHELVE = '/tmp/progressbar-all-the-things.db'
 
 
 BPFTRACE_CODE = rb"""
