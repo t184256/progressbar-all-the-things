@@ -78,16 +78,16 @@ class StatsKeeper():
     def __init__(self):
         try:
             with shelve.open(SHELVE) as db:
-                self.previous_processes = db['previous_processes']
+                self.previously_written = db['previously_written']
         except KeyError:
-            self.previous_processes = {}
+            self.previously_written = {}
         self.tracked_processes = {}
         self.notable_processes = {}
         self.bars = {}
 
     def save(self):
             with shelve.open(SHELVE) as db:
-                db['previous_processes'] = self.previous_processes
+                db['previously_written'] = self.previously_written
 
     def run(self):
         for line in bpftrace():
@@ -124,14 +124,13 @@ class StatsKeeper():
         self.notable_processes[pr.pid] = pr
         desc = f'{pr.pid:7d} {pr.comm.decode()[:15]}'
         fmt = '{l_bar}{bar}|{remaining}'
-        if pr.hash in self.previous_processes:
-            prev = self.previous_processes[pr.hash]
-            self.bars[pr.pid] = tqdm.tqdm(total=prev.written,
+        if pr.hash in self.previously_written:
+            prev_written = self.previously_written[pr.hash]
+            self.bars[pr.pid] = tqdm.tqdm(total=prev_written,
                                           leave=False,
                                           bar_format=fmt, desc=desc,
                                           mininterval=.05, delay=.05,
-                                          maxinterval=.15, miniters=1,
-                                          )
+                                          maxinterval=.15, miniters=1)
         else:
             self.bars[pr.pid] = tqdm.tqdm(leave=False,
                                           bar_format=fmt, desc=desc,
@@ -143,7 +142,7 @@ class StatsKeeper():
             pr = self.tracked_processes[pid]
             del self.tracked_processes[pid]
             if pid in self.notable_processes:
-                self.previous_processes[pr.hash] = pr
+                self.previously_written[pr.hash] = pr.written
                 del self.notable_processes[pid]
                 self.bars[pid].close()
                 del self.bars[pid]
