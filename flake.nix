@@ -1,6 +1,5 @@
 {
-  # TODO: set meaningful description
-  description = "TODO";
+  description = "Guesstimate progress of arbitrary process trees with flashy progressbars. ";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
   #inputs.nixpkgs.url = "github:NixOS/nixpkgs";
@@ -11,12 +10,12 @@
         let
           pkgs = nixpkgs.legacyPackages.${system};
           # TODO: replace project-name with a dashed project name
-          project-name = pkgs.python3Packages.buildPythonPackage {
-            pname = "project-name";  # TODO: replace
+          patt-server = pkgs.python3Packages.buildPythonPackage {
+            pname = "progressbar-all-the-things";
             version = "0.0.1";
             src = ./.;
             propagatedBuildInputs = with pkgs.python3Packages; [
-              # TODO: list python dependencies
+              tqdm
             ];
             checkInputs = with pkgs.python3Packages; [
               pytest
@@ -29,10 +28,10 @@
           };
         in
         {
-          packages.project-name = project-name;  # TODO: replace
-          defaultPackage = project-name;  # TODO: replace
-          apps.project-name = flake-utils.lib.mkApp { drv = project-name; }; # TODO: replace
-          defaultApp = project-name;  # TODO: replace
+          packages.patt-server = patt-server;
+          defaultPackage = patt-server;
+          apps.project-name = flake-utils.lib.mkApp { drv = patt-server; };
+          defaultApp = patt-server;
           devShell = import ./shell.nix { inherit pkgs; };
         }
       );

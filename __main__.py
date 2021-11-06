@@ -1,6 +1,6 @@
-# SPDX-FileCopyrightText: 0000 Author Name <author@example.org>
-# SPDX-License-Identifier: CC-PDDC
+# SPDX-FileCopyrightText: 2021 Alexander Sosedkin <monk@unboiled.info>
+# SPDX-License-Identifier: GPL-3.0-only
 
-import project_name.main
+import patt.main
 
-project_name.main.main()
+patt.main.main()

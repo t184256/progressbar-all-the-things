@@ -1,22 +1,27 @@
-# SPDX-FileCopyrightText: 0000 Author Name <author@example.org>
-# SPDX-License-Identifier: CC-PDDC
+# SPDX-FileCopyrightText: 2021 Alexander Sosedkin <monk@unboiled.info>
+# SPDX-License-Identifier: GPL-3.0-only
 
 from setuptools import setup
 
 setup(
-    name='project-name',  # TODO: replace
+    name='progressbar-all-the-things',
     version='0.0.1',
-    url='https://your.git.forge/USERNAME/project-name',  # TODO: replace
-    author='Full Name',  # TODO: replace
-    author_email='login@example.com',  # TODO: replace
-    description="TODO",  # TODO: replace
+    url='https://github.com/t184256/progressbar-all-the-things',
+    author='Alexander Sosedkin',
+    author_email='monk@unboiled.info',
+    description=(
+        'Guesstimate progress of arbitrary process trees '
+        'with flashy progressbars.'
+    ),
     packages=[
-        'project_name',  # TODO: replace
+        'patt',
     ],
-    install_requires=[],  # TODO: specify python dependencies
+    install_requires=[
+        'tqdm',
+    ],
     entry_points={
         'console_scripts': [
-            'project-name = project_name.main:main',  # TODO: rename
+            'patt = patt.main:main',
         ],
     },
 )

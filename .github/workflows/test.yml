@@ -5,33 +5,12 @@ on:
   push:
 
 jobs:
-  unit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: pip3 install pytest
-      - run: make unit
-
-  coverage:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: pip3 install pytest coverage
-      - run: make coverage
-
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: pip3 install flake8 flake8-import-order codespell
       - run: make lint
-
-  installation:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: pip install .
-      - run: make installation-tests
 
   nix:
     runs-on: ubuntu-latest
