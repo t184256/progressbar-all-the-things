@@ -123,18 +123,18 @@ class StatsKeeper():
     def promote_to_notable(self, pr):
         self.notable_processes[pr.pid] = pr
         desc = f'{pr.pid:7d} {pr.comm.decode()[:15]}'
+        fmt = '{l_bar}{bar}|{remaining}'
         if pr.hash in self.previous_processes:
             prev = self.previous_processes[pr.hash]
-            self.bars[pr.pid] = tqdm.tqdm(total=prev.written, desc=desc,
-                                          leave=False, unit='B',
-                                          unit_scale=True, unit_divisor=1024,
+            self.bars[pr.pid] = tqdm.tqdm(total=prev.written,
+                                          leave=False,
+                                          bar_format=fmt, desc=desc,
                                           mininterval=.05, delay=.05,
                                           maxinterval=.15, miniters=1,
                                           )
         else:
-            self.bars[pr.pid] = tqdm.tqdm(desc=desc,
-                                          leave=False, unit='B',
-                                          unit_scale=True, unit_divisor=1024,
+            self.bars[pr.pid] = tqdm.tqdm(leave=False,
+                                          bar_format=fmt, desc=desc,
                                           mininterval=.05, delay=.05,
                                           maxinterval=.15, miniters=1)
 
