@@ -34,5 +34,5 @@ lint-spdx-check:
 	@echo '  SPDX tags of Python files are in order.'
 
 nix-tests:
-	nix run .
+	nix build .
 	nix flake check

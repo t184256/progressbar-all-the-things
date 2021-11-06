@@ -9,9 +9,8 @@
       (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-          # TODO: replace project-name with a dashed project name
-          patt-server = pkgs.python3Packages.buildPythonPackage {
-            pname = "progressbar-all-the-things";
+          patt = pkgs.python3Packages.buildPythonPackage {
+            pname = "patt";
             version = "0.0.1";
             src = ./.;
             propagatedBuildInputs = with pkgs.python3Packages; [
@@ -28,10 +27,10 @@
           };
         in
         {
-          packages.patt-server = patt-server;
-          defaultPackage = patt-server;
-          apps.project-name = flake-utils.lib.mkApp { drv = patt-server; };
-          defaultApp = patt-server;
+          packages.patt = patt;
+          defaultPackage = patt;
+          apps.project-name = flake-utils.lib.mkApp { drv = patt; };
+          defaultApp = patt;
           devShell = import ./shell.nix { inherit pkgs; };
         }
       );
