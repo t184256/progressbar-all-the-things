@@ -28,7 +28,6 @@ interval:ms:20 {
     if (@activity == 1) {
         print(@);
         clear(@);
-        print("!!!!\n");
         @activity = 0;
     }
 }
@@ -41,9 +40,11 @@ tracepoint:syscalls:sys_enter_exec* {
 }
 
 tracepoint:sched:sched_process_exit {
-    print(@);
-    clear(@);
-    print("!!!!\n");
+    if (@activity == 1) {
+        print(@);
+        clear(@);
+        @activity = 0;
+    }
     printf("!exit %d\n", pid);
 }
 """
@@ -98,12 +99,12 @@ class StatsKeeper():
             elif m := re.match(rb'!exit (\d+)\n', line):
                 pid = int(m[1])
                 self.stop_tracking(pid)
-            elif line == b'!!!!\n':
-                self.sync()
             else:
                 pass
 
     def start_tracking(self, pid, comm, cmdline):
+        if pid in self.tracked_processes:
+            self.stop_tracking(pid)
         self.tracked_processes[pid] = ProcessRecord(pid, comm, cmdline,
                 hash(cmdline).digest(), hash(cmdline).hexdigest(), 0)
 
@@ -133,12 +134,6 @@ class StatsKeeper():
                                           unit_scale=True, unit_divisor=1024,
                                           mininterval=.05, delay=.05,
                                           maxinterval=.15, miniters=1)
-
-    def sync(self):
-        pass
-        #for pid, pr in self.notable_processes.items():
-        #    self.bars[pid].update(pr.written)
-        #print(self.notable_processes)
 
     def stop_tracking(self, pid):
         if pid in self.tracked_processes:
