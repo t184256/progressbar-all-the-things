@@ -11,8 +11,9 @@ import subprocess
 
 import tqdm
 
-CUTOFF_SIZE = 2 * 2**10
+CUTOFF_SIZE = 2**10
 SHELVE = '/tmp/progressbar-all-the-things.db'
+MIN_CMD_LEN = 12
 
 
 BPFTRACE_CODE = rb"""
@@ -103,6 +104,8 @@ class StatsKeeper():
                 pass
 
     def start_tracking(self, pid, comm, cmdline):
+        if len(cmdline) < MIN_CMD_LEN:
+            return
         if pid in self.tracked_processes:
             self.stop_tracking(pid)
         self.tracked_processes[pid] = ProcessRecord(pid, comm, cmdline,
