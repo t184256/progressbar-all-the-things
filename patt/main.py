@@ -86,8 +86,8 @@ class StatsKeeper():
         self.bars = {}
 
     def save(self):
-            with shelve.open(SHELVE) as db:
-                db['previously_written'] = self.previously_written
+        with shelve.open(SHELVE) as db:
+            db['previously_written'] = self.previously_written
 
     def run(self):
         for line in bpftrace():
@@ -109,7 +109,9 @@ class StatsKeeper():
         if pid in self.tracked_processes:
             self.stop_tracking(pid)
         self.tracked_processes[pid] = ProcessRecord(pid, comm, cmdline,
-                hash(cmdline).digest(), hash(cmdline).hexdigest(), 0)
+                                                    hash(cmdline).digest(),
+                                                    hash(cmdline).hexdigest(),
+                                                    0)
 
     def account(self, pid, current_written):
         if pid in self.tracked_processes:
@@ -147,7 +149,6 @@ class StatsKeeper():
                 self.bars[pid].close()
                 del self.bars[pid]
             del pr
-
 
 
 def main():
