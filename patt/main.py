@@ -34,10 +34,10 @@ interval:ms:20 {
 }
 
 tracepoint:syscalls:sys_enter_exec* {
+    @[pid] = 0;
     printf("!exec %d %s ", pid, comm);
     join(args->argv);
     print("\n");
-    @[pid] += 0;
 }
 
 tracepoint:sched:sched_process_exit {
